@@ -113,8 +113,10 @@ function getCoursePosition(item: CourseModel) {
               {{ hasConflictCourseByMap(courseItem)[0].title }}
             </div>
             <div class="break-all">
-              <div class="text-8px i-carbon-location-current" />
               {{ hasConflictCourseByMap(courseItem)[0].location }}
+            </div>
+            <div class="text-1">
+              {{ hasConflictCourseByMap(courseItem)[0].teacher }}
             </div>
             <div v-if="hasConflictCourseByMap(courseItem).length > 1"
               class="rounded h-1 top-1 left-1 right-1 absolute bg-white/80" />
