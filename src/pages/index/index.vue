@@ -18,9 +18,10 @@ setCourseList(courses as CourseModel[])
 const showCourseAction = ref(false)
 
 // set the start date
-const someDate = new Date()
-someDate.setDate(someDate.getDate() + -1 * 7)
-setStartDay(someDate)
+// const someDate = new Date('2023-09-02')
+// someDate.setDate(someDate.getDate() + -1 * 7 + 1)
+
+setStartDay(new Date('2023-09-10'))
 
 function handleCreateCourse() {
   uni.navigateTo({
@@ -43,22 +44,15 @@ function handleCloseActionSheet() {
 
 <template>
   <UBasePage>
-    <div
-      class="bg-primary text-white w-full top-0 z-200 fixed font-bold"
-      :style="{ height: `${customBarHeight}px` }"
-    >
+    <div class="bg-primary text-white w-full top-0 z-200 fixed font-bold" :style="{ height: `${customBarHeight}px` }">
       <div :style="{ 'padding-top': `${statusBarHeight}px`, 'height': `${customBarHeight - statusBarHeight}px` }">
         <div class="h-full text-center px-6 relative">
           <div class="h-full text-xl left-4 i-carbon-add absolute" @click="handleCreateCourse" />
-          <div
-            class="flex h-full mx-auto justify-center items-center inline-block text-lg"
-            @click="showCourseAction = !showCourseAction"
-          >
+          <div class="flex h-full mx-auto justify-center items-center inline-block text-lg"
+            @click="showCourseAction = !showCourseAction">
             {{ `第${currentWeekIndex + 1}周${!isStart ? '(未开学)' : ''}` }}
-            <div
-              class="transition-transform duration-300 i-carbon-chevron-up"
-              :class="showCourseAction ? 'rotate-180' : 'rotate-0'"
-            />
+            <div class="transition-transform duration-300 i-carbon-chevron-up"
+              :class="showCourseAction ? 'rotate-180' : 'rotate-0'" />
           </div>
         </div>
       </div>
@@ -66,12 +60,9 @@ function handleCloseActionSheet() {
     <!-- timetable main content -->
     <TimetableContent :show-course-action="showCourseAction" @course-item-click="handleShowActionSheet" />
     <!-- course card -->
-    <CourseActionSheet
-      :show-action-sheet="showActionSheet" :course-item="clickedCourseItem"
-      @cancel="handleCloseActionSheet"
-    />
+    <CourseActionSheet :show-action-sheet="showActionSheet" :course-item="clickedCourseItem"
+      @cancel="handleCloseActionSheet" />
   </UBasePage>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

@@ -6,8 +6,8 @@ import { courseTimeList } from '~/stores/course'
 
 withDefaults(
   defineProps<{ showCourseAction: boolean }>(), {
-    showCourseAction: false,
-  },
+  showCourseAction: false,
+},
 )
 
 const emit = defineEmits(['courseItemClick'])
@@ -91,11 +91,9 @@ function getCoursePosition(item: CourseModel) {
       <TimetableAction :show-course-action="showCourseAction" />
       <TimetableHeader />
     </div>
-    <div
-      class="min-h-max pb-safe p-1 transition-all z-20 duration-300 bg-base"
+    <div class="min-h-max pb-safe p-1 transition-all z-20 duration-300 bg-base"
       grid="~ flow-col rows-10 cols-[0.7fr_repeat(7,1fr)] gap-1" :class="showCourseAction ? 'pt-31' : 'pt-11'"
-      @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd"
-    >
+      @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
       <template v-for="(courseTime, courseIndex) in courseTimeList" :key="courseIndex">
         <div class="text-sm min-h-18" flex="~ col" justify-evenly items-center>
           <div class="font-medium">
@@ -107,11 +105,9 @@ function getCoursePosition(item: CourseModel) {
         </div>
       </template>
       <template v-for="(courseItem, _courseIndex) of deleteWeekCourse" :key="_courseIndex">
-        <div
-          class="rounded-lg p-0.5 relative dark:bg-op40" b="white 2 !op-50"
+        <div class="rounded-lg p-0.5 relative dark:bg-op40" b="white 2 !op-50"
           :style="[getCoursePosition(courseItem), `background-color:${hasConflictCourseByMap(courseItem)[0].color}`]"
-          @click="emit('courseItemClick', courseItem)"
-        >
+          @click="emit('courseItemClick', courseItem)">
           <div class="h-full w-full" text="center white xs" flex="~ col" justify-around items-center>
             <div class="font-medium break-all">
               {{ hasConflictCourseByMap(courseItem)[0].title }}
@@ -120,21 +116,15 @@ function getCoursePosition(item: CourseModel) {
               <div class="text-8px i-carbon-location-current" />
               {{ hasConflictCourseByMap(courseItem)[0].location }}
             </div>
-            <div
-              v-if="hasConflictCourseByMap(courseItem).length > 1"
-              class="rounded h-1 top-1 left-1 right-1 absolute bg-white/80"
-            />
+            <div v-if="hasConflictCourseByMap(courseItem).length > 1"
+              class="rounded h-1 top-1 left-1 right-1 absolute bg-white/80" />
           </div>
         </div>
       </template>
     </div>
-    <div
-      class="bg-primary fixed top-40% z-30 rounded-l-full transition-all duration-300"
-      text="white sm"
-      p="l-4 y-2 r-2"
+    <div class="bg-primary fixed top-40% z-30 rounded-l-full transition-all duration-300" text="white sm" p="l-4 y-2 r-2"
       :class="originalWeekIndex !== currentWeekIndex ? 'right-0' : '-right-full'"
-      @click="setCurrentWeekIndex(originalWeekIndex)"
-    >
+      @click="setCurrentWeekIndex(originalWeekIndex)">
       返回本周
     </div>
   </div>
