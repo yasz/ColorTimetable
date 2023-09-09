@@ -9,7 +9,15 @@ withDefaults(
   showCourseAction: false,
 },
 )
-
+const divideIndex = ref(-1)
+courseTimeList.some((courseTime, index) => {
+  if (courseTime.s > '12') {
+    divideIndex.value = index;
+    return true; // 中止遍历
+  }
+  return false; // 继续遍历
+});
+console.log('【】:', courseTimeList);
 const emit = defineEmits(['courseItemClick'])
 
 const { customBarHeight } = storeToRefs(useAppStore())
@@ -36,6 +44,7 @@ const startX = ref(0)
 const startY = ref(0)
 const towardsX = ref(0)
 const towardsY = ref(0)
+
 
 function resetTouchStatus() {
   startX.value = 0
@@ -91,23 +100,34 @@ function getCoursePosition(item: CourseModel) {
       <TimetableAction :show-course-action="showCourseAction" />
       <TimetableHeader />
     </div>
+
     <div class="min-h-max pb-safe p-1 transition-all z-20 duration-300 bg-base"
       grid="~ flow-col rows-10 cols-[0.7fr_repeat(7,1fr)] gap-1" :class="showCourseAction ? 'pt-31' : 'pt-11'"
       @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
       <template v-for="(courseTime, courseIndex) in courseTimeList" :key="courseIndex">
+        <view class="divider" v-if="courseIndex == divideIndex">
+
+        </view>
         <div class="text-sm min-h-18" flex="~ col" justify-evenly items-center>
+
+
           <div class="font-medium">
             {{ courseIndex + 1 }}
           </div>
+
           <div class="px-0.5 text-8px">
             {{ courseTime.s }}<br>{{ courseTime.e }}
           </div>
         </div>
       </template>
+
       <template v-for="(courseItem, _courseIndex) of deleteWeekCourse" :key="_courseIndex">
+
         <div class="rounded-lg p-0.5 relative dark:bg-op40" b="white 2 !op-50"
           :style="[getCoursePosition(courseItem), `background-color:${hasConflictCourseByMap(courseItem)[0].color}`]"
           @click="emit('courseItemClick', courseItem)">
+
+
           <div class="h-full w-full" text="center white xs" flex="~ col" justify-around items-center>
             <div class="font-medium break-all">
               {{ hasConflictCourseByMap(courseItem)[0].title }}
@@ -121,6 +141,7 @@ function getCoursePosition(item: CourseModel) {
             <div v-if="hasConflictCourseByMap(courseItem).length > 1"
               class="rounded h-1 top-1 left-1 right-1 absolute bg-white/80" />
           </div>
+
         </div>
       </template>
     </div>
@@ -131,3 +152,11 @@ function getCoursePosition(item: CourseModel) {
     </div>
   </div>
 </template>
+<style>
+.divider {
+  margin-top: 30rpx;
+  margin-bottom: 30rpx;
+  height: 0px;
+
+}
+</style>

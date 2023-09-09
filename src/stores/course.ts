@@ -15,7 +15,7 @@ export interface CourseModel {
 
 export const weekTitle = ["日", "一", "二", "三", "四", "五", "六"];
 
-export const courseTimeList = [
+export const courseTimeList:any = [
   { s: "08:50", e: "09:20" },
   { s: "09:40", e: "10:10" },
   { s: "10:30", e: "11:00" },
