@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { findIndex } from 'lodash-es'
 import TimetableAction from './TimetableAction.vue'
 import TimetableHeader from './TimetableHeader.vue'
 import type { CourseModel } from '~/stores/course'
@@ -17,6 +18,7 @@ courseTimeList.some((courseTime, index) => {
   }
   return false; // 继续遍历
 });
+courseTimeList.splice(divideIndex.value, 0, {})
 console.log('【】:', courseTimeList);
 const emit = defineEmits(['courseItemClick'])
 
@@ -26,18 +28,21 @@ const { hasConflictCourseByMap, setCurrentWeekIndex } = useCourseStore()
 
 // delete a course when course at the same time
 const deleteWeekCourse = computed(() => {
-  const weekCourse = Array.from(weekCourseList.value)
-  if (weekCourse.length <= 1)
-    return weekCourse
-  for (let i = 1; i < weekCourse.length; i++) {
-    const { start, week } = weekCourse[i]
-    const { start: prevStart, week: prevWeek } = weekCourse[i - 1]
+  const _weekCourse = [...weekCourseList.value]
+  _weekCourse.forEach((e, i) => {
+    if (e.start > divideIndex.value) {
+      e.start = e.start + 1
+    }
+  })
+  for (let i = 1; i < _weekCourse.length; i++) {
+    const { start, week } = _weekCourse[i]
+    const { start: prevStart, week: prevWeek } = _weekCourse[i - 1]
     if (start === prevStart && week === prevWeek) {
-      weekCourse.splice(i, 1)
+      _weekCourse.splice(i, 1)
       i--
     }
   }
-  return weekCourse
+  return _weekCourse
 })
 
 const startX = ref(0)
@@ -105,14 +110,11 @@ function getCoursePosition(item: CourseModel) {
       grid="~ flow-col rows-10 cols-[0.7fr_repeat(7,1fr)] gap-1" :class="showCourseAction ? 'pt-31' : 'pt-11'"
       @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
       <template v-for="(courseTime, courseIndex) in courseTimeList" :key="courseIndex">
-        <view class="divider" v-if="courseIndex == divideIndex">
-
-        </view>
         <div class="text-sm min-h-18" flex="~ col" justify-evenly items-center>
 
 
-          <div class="font-medium">
-            {{ courseIndex + 1 }}
+          <div v-if="courseIndex != divideIndex" class="font-medium">
+            {{ courseIndex > divideIndex ? courseIndex : courseIndex + 1 }}
           </div>
 
           <div class="px-0.5 text-8px">
@@ -127,12 +129,11 @@ function getCoursePosition(item: CourseModel) {
           :style="[getCoursePosition(courseItem), `background-color:${hasConflictCourseByMap(courseItem)[0].color}`]"
           @click="emit('courseItemClick', courseItem)">
 
-
           <div class="h-full w-full" text="center white xs" flex="~ col" justify-around items-center>
             <div class="font-medium break-all">
               {{ hasConflictCourseByMap(courseItem)[0].title }}
             </div>
-            <div class="break-all">
+            <div v-if="hasConflictCourseByMap(courseItem)[0].location != '莘塍'" class="break-all">
               {{ hasConflictCourseByMap(courseItem)[0].location }}
             </div>
             <div class="text-1">
@@ -152,11 +153,4 @@ function getCoursePosition(item: CourseModel) {
     </div>
   </div>
 </template>
-<style>
-.divider {
-  margin-top: 30rpx;
-  margin-bottom: 30rpx;
-  height: 0px;
-
-}
-</style>
+<style></style>
