@@ -4,6 +4,7 @@ export interface CourseModel {
   title: string;
   location: string;
   start: number;
+  position: number;
   duration: number;
   teacher: string;
   // [1-7]
@@ -15,12 +16,12 @@ export interface CourseModel {
 
 export const weekTitle = ["日", "一", "二", "三", "四", "五", "六"];
 
-export const courseTimeList:any = [
+export const courseTimeList: any = [
   { s: "08:50", e: "09:20" },
   { s: "09:40", e: "10:10" },
   { s: "10:15", e: "11:00" },
   { s: "11:00", e: "11:25" },
-  
+
   { s: "14:40", e: "15:10" },
   { s: "15:30", e: "16:00" },
 ];

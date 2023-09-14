@@ -30,9 +30,7 @@ const { hasConflictCourseByMap, setCurrentWeekIndex } = useCourseStore()
 const deleteWeekCourse = computed(() => {
   const _weekCourse = [...weekCourseList.value]
   _weekCourse.forEach((e, i) => {
-    if (e.start > divideIndex.value) {
-      e.start = e.start + 1
-    }
+    e.position = e.start > divideIndex.value ? e.start + 1 : e.start
   })
   for (let i = 1; i < _weekCourse.length; i++) {
     const { start, week } = _weekCourse[i]
@@ -93,7 +91,7 @@ function handleTouchEnd() {
  */
 function getCoursePosition(item: CourseModel) {
   return {
-    'grid-row': `${item.start} / ${item.start + item.duration}`,
+    'grid-row': `${item.position} / ${item.position + item.duration}`,
     'grid-column': `${item.week + 1} / ${item.week + 1 + 1}`,
   }
 }
@@ -130,7 +128,7 @@ function getCoursePosition(item: CourseModel) {
           @click="emit('courseItemClick', courseItem)">
 
           <div class="h-full w-full" text="center white xs" flex="~ col" justify-around items-center>
-            <div class="font-medium break-all">
+            <div class="text-sm break-all">
               {{ hasConflictCourseByMap(courseItem)[0].title }}
             </div>
             <div v-if="hasConflictCourseByMap(courseItem)[0].location != '莘塍'" class="break-all">
